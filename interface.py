@@ -93,8 +93,8 @@ class interface(tk.Tk):
                     i = int(data) 
                     n = int(nCaps[i].get())+1
                     nCaps[i].set(str(n)) 
-                    total = int(nCaps[8].get()) + 1
-                    nCaps[8].set(total)
+                    total = int(nCaps[10].get()) + 1
+                    nCaps[10].set(total)
             
         #for i in range(0,8,1):
         #        n = int(nCaps[i].get())+1
@@ -156,7 +156,7 @@ class menuCont(tk.Frame):
             SMS.Message.StartStop.Start
         )
         global nCaps
-        nCaps[8].set(0)
+        nCaps[10].set(0)
         ctrl.showFrame(contagem1)
         
 
@@ -220,11 +220,11 @@ class separacao2(tk.Frame):
         l1 = tk.Label(self, text="EM OPERAÇÃO...",font=("Paytone One", 20),fg='red',bg='black').place(x=517,y=48)
         global nCaps
         nCaps = []
-        for i in range(0,9,1):
+        for i in range(0,11,1):
                 var = tk.StringVar(self)
                 var.set("0")
                 nCaps.append(var)
-        nCaps[8].set(0)
+        nCaps[10].set(0)
         y = 160
         n=0
         for x in range(45,750,90):
@@ -233,7 +233,7 @@ class separacao2(tk.Frame):
                 nc = tk.Label(self, textvar=nCaps[n],font=("Paytone One", 40),width=2,justify='center',fg='white',bg='black').place(x=x,y=y+78)
                 n = n+1
         l2 = tk.Label(self, text="TOTAL:",font=("Paytone One", 30),fg='white',bg='black').place(x=45,y=355)
-        l3 = tk.Label(self, textvar=nCaps[8],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
+        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
         buttonGo = tk.Button(self, text = "PARAR",font=("Paytone One", 25),bd=12,bg='red',activebackground='red',fg="black",height=1,width=10,command=lambda:self.sepStop(controller)).place(x=470,y=350)
     
     def sepStop(self,ctrl):
@@ -262,7 +262,7 @@ class separacao3(tk.Frame):
                 nc = tk.Label(self, textvar=nCaps[n],font=("Paytone One", 40),width=2,justify='center',fg='white',bg='black').place(x=x,y=y+78)
                 n = n+1
         l2 = tk.Label(self, text="TOTAL:",font=("Paytone One", 30),fg='white',bg='black').place(x=45,y=355)
-        l3 = tk.Label(self, textvar=nCaps[8],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
+        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
         buttonGo = tk.Button(self, text = "AVANÇAR",font=("Paytone One", 25),bd=12,bg='#00B050',activebackground='#00B050',fg="black",height=1,width=10,command=lambda:controller.showFrame(menuSep)).place(x=470,y=350)
 
 
@@ -276,7 +276,7 @@ class contagem1(tk.Frame):
         canvas.create_rectangle(450,30,805,110,width=3,outline='red')
         l1 = tk.Label(self, text="EM OPERAÇÃO...",font=("Paytone One", 20),fg='red',bg='black').place(x=517,y=48)
         l2 = tk.Label(self, text="Nº DE CÁPSULAS:",font=("Paytone One", 30),fg='white',bg='black').place(x=230,y=155)
-        l3 = tk.Label(self, textvar=nCaps[8],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
+        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
         buttonGo = tk.Button(self, text = "PARAR",font=("Paytone One", 30),bd=12,bg='red',activebackground='red',fg="black",height=1,width=10,command=lambda:self.exitCont1(controller)).place(x=233,y=340)
  
     def exitCont1(self,ctrl):
@@ -298,7 +298,7 @@ class contagem2(tk.Frame):
         canvas.create_rectangle(450,30,805,110,width=3,outline='#00B050')
         l1 = tk.Label(self, text="OPERAÇÃO CONCLUÍDA",font=("Paytone One", 20),fg='#00B050',bg='black').place(x=465,y=48)
         l2 = tk.Label(self, text="Nº DE CÁPSULAS:",font=("Paytone One", 30),fg='white',bg='black').place(x=230,y=155)
-        l3 = tk.Label(self, textvar=nCaps[8],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
+        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
         buttonGo = tk.Button(self, text = "AVANÇAR",font=("Paytone One", 30),bd=12,bg='#00B050',activebackground='#00B050',fg="black",height=1,width=10,command=lambda:controller.showFrame(menuSep)).place(x=233,y=340)
 
 
