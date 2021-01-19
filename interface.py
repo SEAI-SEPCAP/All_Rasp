@@ -204,7 +204,7 @@ class separacao1(tk.Frame):
             SMS.Message.StartStop.Start
         )
         global nCaps
-        for i in range(0,9,1):
+        for i in range(0,11,1):
                 nCaps[i].set(0)
         
         ctrl.showFrame(separacao2)
