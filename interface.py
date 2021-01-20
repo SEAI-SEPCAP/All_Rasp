@@ -3,6 +3,7 @@
 
 import sys
 import tkinter as tk
+import time
 from PIL import ImageTk,Image
 from threading import Timer
 from pynput import mouse
@@ -11,9 +12,9 @@ from sms import SepcapMessagingSystem as SMS
 
 IMG_X = 80
 IMG_Y = 200
-IMG_DIMX = 355
-IMG_DIMY = 240
-IMG_SEP = "sep.png"
+IMG_DIMX = 100
+IMG_DIMY = 300
+IMG_SEP = "sep.jpg"
 IMG_LOGO = "logo.png"
 IMG_OFF = "off.png"
 IMG_CAPS = "caps.PNG"
@@ -73,11 +74,7 @@ class interface(tk.Tk):
         frame.tkraise()
             
     def update(self):
-        self.frames[calib2].sep = Image.open(IMG_SEP)
-        self.frames[calib2].sep = self.frames[calib2].sep.resize((IMG_DIMX,IMG_DIMY),Image.ANTIALIAS)
-        self.frames[calib2].sep= ImageTk.PhotoImage(self.frames[calib2].sep, Image.ANTIALIAS)
-        self.frames[calib2].imgSep.configure(image=self.frames[calib2].sep)
-        self.frames[calib2].imgSep.image = self.frames[calib2].sep
+        
         global nCaps
         
         if self.sms.isData():
@@ -91,18 +88,28 @@ class interface(tk.Tk):
                         self.showFrame(menuSep)
                 elif (mtype==SMS.Message.NewCapsule.type):
                     i = int(data) 
-                    n = int(nCaps[i].get())+1
-                    nCaps[i].set(str(n)) 
-                    total = int(nCaps[10].get()) + 1
-                    nCaps[10].set(total)
-            
+                    if (i==255):
+                        n = int(nCaps[11].get())+1
+                        nCaps[11].set(str(n)) 
+                        nCaps[0].set(n-int(nCaps[10].get()))
+                    else:
+                        n = int(nCaps[i].get())+1
+                        nCaps[i].set(str(n)) 
+                        total = int(nCaps[10].get()) + 1
+                        nCaps[10].set(total)
+                elif (mtype==SMS.Message.CalibrationConf.type):
+                    self.frames[calib2].sep = Image.open(IMG_SEP)
+                    self.frames[calib2].sep = self.frames[calib2].sep.resize((IMG_DIMX,IMG_DIMY),Image.ANTIALIAS)
+                    self.frames[calib2].sep= ImageTk.PhotoImage(self.frames[calib2].sep, Image.ANTIALIAS)
+                    self.frames[calib2].imgSep.configure(image=self.frames[calib2].sep)
+                    self.frames[calib2].imgSep.image = self.frames[calib2].sep
         #for i in range(0,8,1):
         #        n = int(nCaps[i].get())+1
         #        nCaps[i].set(str(n)) 
         #        total = total + n
         #nCaps[8].set(total)
         self.frames[calib2].updateRGB()
-        self.after(100,self.update)
+        self.after(50,self.update)
 
 
 class iniPage(tk.Frame):
@@ -156,7 +163,7 @@ class menuCont(tk.Frame):
             SMS.Message.StartStop.Start
         )
         global nCaps
-        nCaps[10].set(0)
+        nCaps[11].set(0)
         ctrl.showFrame(contagem1)
         
 
@@ -204,7 +211,7 @@ class separacao1(tk.Frame):
             SMS.Message.StartStop.Start
         )
         global nCaps
-        for i in range(0,11,1):
+        for i in range(0,12,1):
                 nCaps[i].set(0)
         
         ctrl.showFrame(separacao2)
@@ -220,11 +227,10 @@ class separacao2(tk.Frame):
         l1 = tk.Label(self, text="EM OPERAÇÃO...",font=("Paytone One", 20),fg='red',bg='black').place(x=517,y=48)
         global nCaps
         nCaps = []
-        for i in range(0,11,1):
+        for i in range(0,12,1):
                 var = tk.StringVar(self)
                 var.set("0")
                 nCaps.append(var)
-        nCaps[10].set(0)
         y = 160
         n=0
         for x in range(45,750,90):
@@ -233,7 +239,7 @@ class separacao2(tk.Frame):
                 nc = tk.Label(self, textvar=nCaps[n],font=("Paytone One", 40),width=2,justify='center',fg='white',bg='black').place(x=x,y=y+78)
                 n = n+1
         l2 = tk.Label(self, text="TOTAL:",font=("Paytone One", 30),fg='white',bg='black').place(x=45,y=355)
-        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
+        l3 = tk.Label(self, textvar=nCaps[11],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
         buttonGo = tk.Button(self, text = "PARAR",font=("Paytone One", 25),bd=12,bg='red',activebackground='red',fg="black",height=1,width=10,command=lambda:self.sepStop(controller)).place(x=470,y=350)
     
     def sepStop(self,ctrl):
@@ -262,7 +268,7 @@ class separacao3(tk.Frame):
                 nc = tk.Label(self, textvar=nCaps[n],font=("Paytone One", 40),width=2,justify='center',fg='white',bg='black').place(x=x,y=y+78)
                 n = n+1
         l2 = tk.Label(self, text="TOTAL:",font=("Paytone One", 30),fg='white',bg='black').place(x=45,y=355)
-        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
+        l3 = tk.Label(self, textvar=nCaps[11],font=("Paytone One", 40),fg='#db9d00',bg='black').place(x=205,y=345)
         buttonGo = tk.Button(self, text = "AVANÇAR",font=("Paytone One", 25),bd=12,bg='#00B050',activebackground='#00B050',fg="black",height=1,width=10,command=lambda:controller.showFrame(menuSep)).place(x=470,y=350)
 
 
@@ -276,7 +282,7 @@ class contagem1(tk.Frame):
         canvas.create_rectangle(450,30,805,110,width=3,outline='red')
         l1 = tk.Label(self, text="EM OPERAÇÃO...",font=("Paytone One", 20),fg='red',bg='black').place(x=517,y=48)
         l2 = tk.Label(self, text="Nº DE CÁPSULAS:",font=("Paytone One", 30),fg='white',bg='black').place(x=230,y=155)
-        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
+        l3 = tk.Label(self, textvar=nCaps[11],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
         buttonGo = tk.Button(self, text = "PARAR",font=("Paytone One", 30),bd=12,bg='red',activebackground='red',fg="black",height=1,width=10,command=lambda:self.exitCont1(controller)).place(x=233,y=340)
  
     def exitCont1(self,ctrl):
@@ -298,7 +304,7 @@ class contagem2(tk.Frame):
         canvas.create_rectangle(450,30,805,110,width=3,outline='#00B050')
         l1 = tk.Label(self, text="OPERAÇÃO CONCLUÍDA",font=("Paytone One", 20),fg='#00B050',bg='black').place(x=465,y=48)
         l2 = tk.Label(self, text="Nº DE CÁPSULAS:",font=("Paytone One", 30),fg='white',bg='black').place(x=230,y=155)
-        l3 = tk.Label(self, textvar=nCaps[10],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
+        l3 = tk.Label(self, textvar=nCaps[11],font=("Paytone One", 50),width=5,justify='center',fg='#db9d00',bg='black').place(x=280,y=205)
         buttonGo = tk.Button(self, text = "AVANÇAR",font=("Paytone One", 30),bd=12,bg='#00B050',activebackground='#00B050',fg="black",height=1,width=10,command=lambda:controller.showFrame(menuSep)).place(x=233,y=340)
 
 
@@ -314,16 +320,16 @@ class calib1(tk.Frame):
         capsImg.image = caps
         capsImg.place(x=45,y=160)
         buttonBack = tk.Button(self, text = "VOLTAR",font=("Paytone One", 20),bd=10,bg='grey',activebackground='grey',fg="black",height=1,width=7,command=lambda:controller.showFrame(menuSep)).place(x=570,y=40)
-        button1 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#D8CF3B',activebackground='#D8CF3B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,0)).place(x=65,y=300)
-        button2 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#F9EA0B',activebackground='#F9EA0B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,1)).place(x=139,y=300)
-        button4 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,2)).place(x=213,y=300)
-        button5 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#D8CF3B',activebackground='#D8CF3B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,3)).place(x=213,y=380)
-        button6 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#91AE8D',activebackground='#91AE8D',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,4)).place(x=287,y=300)
-        button7 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,5)).place(x=287,y=380)
-        button8 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,6)).place(x=360,y=300)
-        button9 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#007CCB',activebackground='#007CCB',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,7)).place(x=437,y=300)
-        button10 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#EA2322',activebackground='#EA2322',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,8)).place(x=513,y=300)
-        button11 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#EA2322',activebackground='#EA2322',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,9)).place(x=589,y=300)
+        button1 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#D8CF3B',activebackground='#D8CF3B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,6)).place(x=65,y=300)
+        button2 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#F9EA0B',activebackground='#F9EA0B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,0)).place(x=139,y=300)
+        button4 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,4)).place(x=213,y=300)
+        button5 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#D8CF3B',activebackground='#D8CF3B',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,6)).place(x=213,y=380)
+        button6 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#91AE8D',activebackground='#91AE8D',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,5)).place(x=287,y=300)
+        button7 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,4)).place(x=287,y=380)
+        button8 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#075730',activebackground='#075730',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,4)).place(x=360,y=300)
+        button9 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#007CCB',activebackground='#007CCB',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,3)).place(x=437,y=300)
+        button10 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#EA2322',activebackground='#EA2322',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,1)).place(x=513,y=300)
+        button11 = tk.Button(self, text = "",font=("Paytone One", 10),bd=0,bg='#EA2322',activebackground='#EA2322',fg="black",height=3,width=3,command=lambda:self.exitCalib1(controller,1)).place(x=589,y=300)
 
     def exitCalib1(self,ctrl,color):
         ctrl.sms.sendPacket(
@@ -396,19 +402,23 @@ class calib2(tk.Frame):
                 nPoints = 0
                 ctrl.sms.sendPacket(
                     SMS.Address.Classification,
-                    SMS.Message.CalibrationRComponent.type,
+                    SMS.Message.CalibrationR.type,
                     meanR
                 )
+                time.sleep(0.05)
                 ctrl.sms.sendPacket(
                     SMS.Address.Classification,
-                    SMS.Message.CalibrationGComponent.type,
+                    SMS.Message.CalibrationG.type,
                     meanG
                 )
+                time.sleep(0.05)
                 ctrl.sms.sendPacket(
                     SMS.Address.Classification,
-                    SMS.Message.CalibrationBComponent.type,
+                    SMS.Message.CalibrationB.type,
                     meanB
                 )
+                
+                
                 ctrl.showFrame(calib3)
         elif (dest=="back"):
                 nPoints = 0
