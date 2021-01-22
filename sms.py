@@ -39,6 +39,28 @@ class SepcapMessagingSystem(object):
             type = 2
             Stop = 0
             Start = 1
+            Count = 2
+        
+        class CalibrationColor(enum.IntEnum):
+            type = 3
+            Yellow = 0
+            Red = 1
+            White = 2
+            Blue = 3
+            Dark_Green = 4
+            Light_Green = 5
+            Nude = 6
+            
+        class CalibrationR(enum.IntEnum):
+            type = 4
+        class CalibrationG(enum.IntEnum):
+            type = 5
+        class CalibrationB(enum.IntEnum):
+            type = 6
+        class CalibrationConf(enum.IntEnum):
+            type = 7
+            
+            
 
     def __init__(self, stream_in, stream_out, type="tty"):
         self.stream_in = stream_in

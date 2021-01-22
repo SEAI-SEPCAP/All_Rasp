@@ -36,7 +36,7 @@ def capsule_type(colors):
         elif color == 'white':
             return 3
         elif color == 'nude':
-            return 8
+            return 0
         elif color == 'blue':
             return 4
     
@@ -53,7 +53,7 @@ def capsule_type(colors):
         elif ("blue" in colors):
             return 4
         elif ("dark green" in colors) and ("light green" in colors):
-            return 9
+            return 0
         else: return 0
     else: return 0
     
@@ -128,7 +128,10 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
     ### CALIBRATION
     if sms.isData():
             address, mtype, data = sms.readPacket()
-            if ((address==SMS.Address.Classification)):
+            if ((address==SMS.Address.Broadcast)):
+                if(mtype==SMS.Message.StartStop.type):
+                    start = int(data)
+            elif ((address==SMS.Address.Classification)):
                 if (mtype==SMS.Message.CalibrationColor.type):
                     send_calib_message(image)
                     if(data==SMS.Message.CalibrationColor.Red):
@@ -172,10 +175,12 @@ for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=
         flag = 1
         print("Capsule detected: ", colors)
         ##send comm
+        #if start==1:
         sms.sendPacket(
            SMS.Address.Broadcast, 
            SMS.Message.NewCapsule.type, 
            capsule_type(colors))
+            
         capsule_count = capsule_count + 1
 
     elif (len(rect) == 0 and flag == 1) and old_flag == 0:

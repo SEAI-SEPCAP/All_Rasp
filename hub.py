@@ -19,7 +19,7 @@ def main():
     HubToInterface = open(sys.argv[3], 'wb')
     InterfaceToHub = open(sys.argv[4], 'rb')
     #ser = AutoSerial("/dev/ttyAMA0")
-    ser = serial.Serial("/dev/ttyS0")
+    ser = serial.Serial("/dev/ttyUSB0")
 
     std = SMS(sys.stdin, sys.stdout)
     classification = SMS(ClassToHub, HubToClass)
@@ -45,6 +45,19 @@ def main():
         for pipe in allPipes:
             if pipe.isData():
                 address, mtype, data = pipe.readPacket()
+                if address == 0:
+                    name = "broad"
+                elif address == 1:
+                    name = "inv"
+                elif address == 2:
+                    name = "class"
+                elif address == 3:
+                    name = "dist"
+                elif address == 4:
+                    name = "inter"
+                else: name = error
+                
+                print(f'{name}: {address}, {mtype}, {data}')
                 pipeArray = getRedirectStream(pipeMap, address)
                 for redirPipe in pipeArray:
                     redirPipe.sendPacket(address, mtype, data)

@@ -28,9 +28,9 @@ def colorDetector(image, min_area, proportion, boundaries):
     
 
     #black mask for detection of capsule and cropping
-    mask = cv.inRange(image, np.array([0,0,0]) , np.array([60,60,60])) #mudei de 30,30,30
+    mask = cv.inRange(image, np.array([0,0,0]) , np.array([40,40,40])) #mudei de 30,30,30
     mask = (255 - mask)
-    cv.imshow("mask", mask)
+    #cv.imshow("mask", mask)
     
 
     rect = boundBox(image, mask, min_area = min_area)
@@ -45,7 +45,7 @@ def colorDetector(image, min_area, proportion, boundaries):
         #print("Y: ", rect[0][1]+int((1-(p)) * rect[0][1]))
         kernel = np.ones((9,9), np.uint8) #mudei de 7,7
         crop = cv.erode(crop, kernel)
-        cv.imshow("Cropped image", crop)
+        #cv.imshow("Cropped image", crop)
         #cv.imshow("Cropped image", cv.resize(crop, None, fx = 3, fy = 3, interpolation= cv.INTER_CUBIC))
         #cv.setMouseCallback("Cropped image", click)
         
@@ -58,7 +58,7 @@ def colorDetector(image, min_area, proportion, boundaries):
                     colors_detected.append(color)
                     if color == name_mask:
                         mask = cv.inRange(crop, lower, upper)
-                        cv.imshow("mask",mask)
+                        #cv.imshow("mask",mask)
             if len(colors_detected) == 2:
                 break
     else:
